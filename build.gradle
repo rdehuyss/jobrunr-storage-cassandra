@@ -1,0 +1,36 @@
+plugins {
+    id 'java-library'
+}
+
+apply plugin: 'idea'
+
+group 'org.jobrunr'
+version '1.0-SNAPSHOT'
+
+repositories {
+    jcenter()
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+compileTestJava {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+dependencies {
+    compile 'org.jobrunr:jobrunr:0.9.4'
+    compile 'com.datastax.oss:java-driver-core:4.4.0'
+    compile 'com.datastax.oss:java-driver-query-builder:4.4.0'
+
+    testCompile 'org.junit.jupiter:junit-jupiter:5.6.1'
+    testCompile 'org.jobrunr:jobrunr:0.9.4:test-fixtures'
+    testCompile 'org.awaitility:awaitility:4.0.2'
+    testCompile 'org.assertj:assertj-core:3.16.1'
+}
+
+
+test {
+    useJUnitPlatform()
+}
