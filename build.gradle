@@ -1,11 +1,12 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
 
 apply plugin: 'idea'
 
 group 'org.jobrunr'
-version '1.0-SNAPSHOT'
+version '0.9-SNAPSHOT'
 
 repositories {
     jcenter()
@@ -33,4 +34,42 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'org.jobrunr.storage'
+            artifactId = 'cassandra'
+            version = project.version.replace("v", "")
+            from components.java
+
+            pom {
+                name = 'JobRunr Cassandra Storage Provider'
+                description = 'A JobRunr Storage Provider for Cassandra.'
+                url = 'https://github.com/rdehuyss/jobrunr-storage-cassandra'
+                developers {
+                    developer {
+                        id = 'rdehuyss'
+                        name = 'Ronald Dehuysser'
+                        email = 'ronald.dehuysser@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/rdehuyss/jobrunr-storage-cassandra.git'
+                    developerConnection = 'scm:git@github.com:rdehuyss/jobrunr-storage-cassandra.git'
+                    url = 'https://github.com/rdehuyss/jobrunr-storage-cassandra.git'
+                }
+
+                withXml {
+                    Node pomNode = asNode()
+                    pomNode.dependencies.'*'.findAll() {
+                        it.optional.text() == 'true'
+                    }.each() {
+                        it.parent().remove(it)
+                    }
+                }
+            }
+        }
+    }
 }
